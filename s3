@@ -1,0 +1,43 @@
+```markdown
+# Terraform Configuration to Provision an S3 Bucket on AWS
+
+# This Terraform configuration file provisions an S3 bucket on AWS.
+# It includes comments to explain each section of the code.
+
+# Specify the Terraform provider
+provider "aws" {
+    region = "us-east-1" # Replace with your desired AWS region
+}
+
+# Define the S3 bucket resource
+resource "aws_s3_bucket" "example_bucket" {
+    bucket = "my-unique-bucket-name-987654321" # Ensure this is a globally unique bucket name
+    acl    = "private"              # Set the bucket's access control list (ACL)
+
+    # Enable versioning for the bucket
+    versioning {
+        enabled = true
+    }
+
+    # Add server-side encryption
+    server_side_encryption_configuration {
+        rule {
+            apply_server_side_encryption_by_default {
+                sse_algorithm = "AES256"
+            }
+        }
+    }
+
+    # Add tags to the bucket
+    tags = {
+        Environment = "Dev"
+        Project     = "S3BucketProvisioning"
+    }
+}
+
+# Output the bucket name
+output "bucket_name" {
+    value = aws_s3_bucket.example_bucket.bucket
+    description = "The name of the S3 bucket"
+}
+```
